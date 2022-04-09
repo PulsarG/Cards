@@ -1,0 +1,66 @@
+.menu {
+    margin-top: 5%;
+}
+
+.btn {
+    margin: auto;
+    padding: 5px;
+    height: 40px;
+    width: 150px;
+}
+
+.card {
+    height: 150px;
+    width: 400px;
+}
+
+.maincards {
+    margin-top: 5%;
+    padding: 2px;
+}
+
+.btnnext {
+    height: 30px;
+    width: 90px;
+    justify-self: center;
+    align-self: center;
+    margin: 20px;
+}
+
+.one {
+    padding: 20px;
+}
+
+.threebtn {
+    padding: 2ex;
+    height: 70px;
+    width: 500px;
+}
+
+.addwords {
+    margin-top: 100px;
+}
+
+.inn {
+    width: 400px;
+    height: 30px;
+}
+
+.form {
+    padding: 5px;
+}
+
+.btnadd {
+    margin-top: 1%;
+    width: 150px;
+}
+
+.cardopacity {
+    background: black;
+    transition: 0.5ms;
+}
+
+p {
+    font-size: 25px;
+    color: black;
+}
