@@ -64,3 +64,35 @@ p {
     font-size: 25px;
     color: black;
 }
+
+.grid {
+    margin-top: 50px;
+    display: inline-block;
+   /*  border: 1px solid red; */
+}
+
+.gridd {
+    float: left;
+}
+
+.left {
+    width: 400px;
+}
+
+.learntext {
+    font-size: 18px;
+    opacity: 0.4;
+    margin-top: 50px;
+    padding: 5px;
+}
+
+.hiddenword {
+    height: 30px;
+    margin-top: 53%;
+}
+
+.learnbtn {
+    background-color: white;
+    border: none;
+    opacity: 1;
+}
