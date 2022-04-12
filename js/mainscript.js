@@ -7,7 +7,7 @@ function HiddenTwoBtnText(n) {
     s.backgroundColor = 'black';
 }
 
-function HiddenLearn (Element) {
+function HiddenLearn(Element) {
     if (Element.style.opacity == 1) {
         Element.style.opacity = 0;
     } else {

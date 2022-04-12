@@ -1,6 +1,22 @@
-{{ define "main" }}
+<!DOCTYPE html>
+<html lang="en">
 
-{{ template "header" }}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Cards</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<header>
+    <center>
+        <div class="menu centerdiv">
+            <button class="btn">Карточки</button>
+            <button class="btn">Список</button>
+            <button class="btn">Other</button>
+        </div>
+    </center>
+</header>
 
 <body>
 
@@ -36,14 +52,13 @@
                     </button>
                 </div>
             </center>
-
             <center>
                 <div class="addwords">
-                    <form action="/" method="post" class="form">
-                        <input type="text" name="firstword" id="firstword" class="inn" placeholder="Иностарнное слово">
+                    <form action="signin" method="post" class="form">
+                        <input type="text" name="firstword" class="inn" placeholder="Иностарнное слово">
                     </form>
-                    <form action="/" method="post" class="form">
-                        <input type="text" name="seconword" id="secondword" class="inn" placeholder="Перевод">
+                    <form action="signin" method="post" class="form">
+                        <input type="text" name="seconword" class="inn" placeholder="Перевод">
                     </form>
                     <button class="btnadd form">Добавить</button>
                 </div>
@@ -57,6 +72,13 @@
 
 </body>
 
-{{ template "footer" }}
+<footer>
+    <script src="../js/mainscript.js"></script>
+    <div class="footdiv">
 
-{{ end }}
+        <a class="fottertext" href="http://Github.com/PulsarG">Github.com/PulsarG</a>
+    </div>
+
+</footer>
+
+</html>

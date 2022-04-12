@@ -1,13 +1,16 @@
 .menu {
+    display: flex;
+    flex-direction: row;
     margin-top: 5%;
+    width: 400px;
 }
 
-.btn {
+/* .btn {
     margin: auto;
     padding: 5px;
     height: 40px;
     width: 150px;
-}
+} */
 
 .card {
     height: 150px;
@@ -57,7 +60,7 @@
 
 .cardopacity {
     background: black;
-    transition: 0.5ms;
+    transition: 1ms;
 }
 
 p {
@@ -65,11 +68,10 @@ p {
     color: black;
 }
 
-.grid {
+/* .grid {
     margin-top: 50px;
     display: inline-block;
-   /*  border: 1px solid red; */
-}
+} */
 
 .gridd {
     float: left;
@@ -95,4 +97,21 @@ p {
     background-color: white;
     border: none;
     opacity: 1;
+}
+
+.footertext {
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.footdiv {
+margin-top: 3%;
+margin-left: 46.5%;
+}
+
+.grid {
+    margin-top: 3%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
