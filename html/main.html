@@ -20,21 +20,25 @@
         </button>
 
         <div class="">
-            {{ range . }}
             <center>
                 <div class="maincards">
                     <button class="card one">
                         <p> {{ .Fword }}</p>
                     </button>
                     <div class="threebtn one">
-                        <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
-                        <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
-                        <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
+                        <form action="/" target="">
+                                <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
+                        </form>
+                        <form action="/" target="">
+                                <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
+                        </form>
+                        <form action="/" target="">
+                                <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
+                        </form>
                     </div>
                     <button class="card one cardopacity" id="twobtn" onclick="ShowTwoBtnText(this);">
                         <p>{{.Sword }}</p>
                     </button>
-                    {{ end }}
                 </div>
             </center>
 
@@ -54,7 +58,9 @@
         </div>
 
         <div class="left">
-            <button onclick="HiddenTwoBtnText('twobtn');" class="hiddenword">Не показывать</button>
+            <form action="/" target="">
+                <button onclick="HiddenTwoBtnText('twobtn');" class="hiddenword">Не показывать</button>
+            </form>
         </div>
     </div>
 

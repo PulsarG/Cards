@@ -34,9 +34,12 @@
 }
 
 .threebtn {
+    display: flex;
+    flex-direction: row;
     padding: 2ex;
     height: 70px;
     width: 500px;
+    justify-content: center;
 }
 
 .addwords {
@@ -67,7 +70,7 @@
 }
 
 p {
-    font-size: 50px;
+    font-size: 25px;
     color: black;
 }
 
@@ -81,6 +84,7 @@ p {
 }
 
 .left {
+    align-items: center;
     width: 400px;
 }
 

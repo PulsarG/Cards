@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"html/template"
 	//"log"
-	"net/http"
-
 	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/gorilla/mux"
+	"math/rand"
+	"net/http"
+	"time"
 )
 
 type WordsStruct struct { // выгрузка БД
@@ -25,16 +25,7 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 
 	m, _ := template.ParseFiles("html/main.html", "html/header.html", "html/footer.html")
 
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
-	if err != nil {
-		//log.Println(err)
-		panic(err)
-	}
-
-	database = db
-	defer db.Close()
-
-	res, err := database.Query("SELECT * FROM `words`")
+	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
 	if err != nil {
 		panic(err)
 	}
@@ -52,10 +43,38 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 
 		wfshow = append(wfshow, sw)
 	}
+
+	rand.Seed(time.Now().Unix())
+	show := wfshow[rand.Intn(len(wfshow))]
+
 	//w.Header().Set("Content-Type", "text/html")
-	//m.Execute(w, wfshow)
-	m.ExecuteTemplate(w, "main", wfshow)
+	m.ExecuteTemplate(w, "main", show)
 }
+
+/* func NextWord() struct{} {
+	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
+	if err != nil {
+		panic(err)
+	}
+	defer res.Close()
+
+	wfshow := []WordsStruct{}
+
+	for res.Next() {
+		var sw WordsStruct
+		err := res.Scan(&sw.Id, &sw.Fword, &sw.Sword, &sw.Freq)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+
+		wfshow = append(wfshow, sw)
+	}
+
+	rand.Seed(time.Now().Unix())
+	sh := wfshow[rand.Intn(len(wfshow))]
+	return sh
+} */
 
 func List(w http.ResponseWriter, r *http.Request) {
 	m, err := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
@@ -108,5 +127,15 @@ func StartFunc() {
 }
 
 func main() {
+
+	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
+	if err != nil {
+		//log.Println(err)
+		panic(err)
+	}
+
+	database = db
+	defer db.Close()
+
 	StartFunc()
 }
