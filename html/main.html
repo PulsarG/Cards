@@ -3,7 +3,6 @@
 {{ template "header" }}
 
 <body>
-
     <div class="grid">
 
         <button onclick="HiddenLearn(this);" class="left learnbtn">
@@ -21,10 +20,11 @@
         </button>
 
         <div class="">
+            {{ range . }}
             <center>
                 <div class="maincards">
                     <button class="card one">
-                        <p>Hello</p>
+                        <p> {{ .Fword }}</p>
                     </button>
                     <div class="threebtn one">
                         <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
@@ -32,21 +32,24 @@
                         <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
                     </div>
                     <button class="card one cardopacity" id="twobtn" onclick="ShowTwoBtnText(this);">
-                        <p>Привет</p>
+                        <p>{{.Sword }}</p>
                     </button>
+                    {{ end }}
                 </div>
             </center>
 
             <center>
-                <div class="addwords">
-                    <form action="/" method="post" class="form">
+                <form action="/addwords" method="post" class="form">
+                    <div>
                         <input type="text" name="firstword" id="firstword" class="inn" placeholder="Иностарнное слово">
-                    </form>
-                    <form action="/" method="post" class="form">
-                        <input type="text" name="seconword" id="secondword" class="inn" placeholder="Перевод">
-                    </form>
-                    <button class="btnadd form">Добавить</button>
-                </div>
+                    </div>
+                    <div>
+                        <input type="text" name="secondword" id="secondword" class="inn" placeholder="Перевод">
+                    </div>
+                    <div>
+                        <button class="btnadd">Добавить</button>
+                    </div>
+                </form>
             </center>
         </div>
 
