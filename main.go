@@ -31,7 +31,7 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	}
 	defer res.Close()
 
-	wfshow := []WordsStruct{}
+	wordsarray := []WordsStruct{}
 
 	for res.Next() {
 		var sw WordsStruct
@@ -40,25 +40,32 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			continue
 		}
-
-		wfshow = append(wfshow, sw)
+		wordsarray = append(wordsarray, sw)
 	}
 
-	rand.Seed(time.Now().Unix())
-	show := wfshow[rand.Intn(len(wfshow))]
+	//show := Next(wordsarray)
 
 	//w.Header().Set("Content-Type", "text/html")
-	m.ExecuteTemplate(w, "main", show)
+	m.ExecuteTemplate(w, "main", Next(wordsarray))
+	
 }
 
-/* func NextWord() struct{} {
+func Next(st []WordsStruct) WordsStruct {
+	rand.Seed(time.Now().Unix())
+	shw := st[rand.Intn(len(st))]
+	return shw
+}
+
+func List(w http.ResponseWriter, r *http.Request) {
+	m, _ := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
+
 	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
 	if err != nil {
 		panic(err)
 	}
 	defer res.Close()
 
-	wfshow := []WordsStruct{}
+	wordsarray := []WordsStruct{}
 
 	for res.Next() {
 		var sw WordsStruct
@@ -67,23 +74,10 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			continue
 		}
-
-		wfshow = append(wfshow, sw)
+		wordsarray = append(wordsarray, sw)
 	}
 
-	rand.Seed(time.Now().Unix())
-	sh := wfshow[rand.Intn(len(wfshow))]
-	return sh
-} */
-
-func List(w http.ResponseWriter, r *http.Request) {
-	m, err := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
-
-	if err != nil {
-		fmt.Fprintf(w, err.Error())
-	}
-
-	m.ExecuteTemplate(w, "list", nil)
+	m.ExecuteTemplate(w, "list", wordsarray)
 }
 
 func AddWords(w http.ResponseWriter, r *http.Request) {
@@ -118,6 +112,7 @@ func StartFunc() {
 
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css/"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./js/"))))
+	http.Handle("/html/", http.StripPrefix("/html/", http.FileServer(http.Dir("./html/"))))
 
 	rtr.HandleFunc("/", MainPage)
 	rtr.HandleFunc("/list", List)

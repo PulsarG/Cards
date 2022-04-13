@@ -2,7 +2,91 @@
 
 {{ template "header" }}
 
+<body>
+    {{ $length := len . }}
+    <center>
+        <h3>Всего словарных карточек: {{$length}}</h3>
+        <div class="tabgridone">
+            <div class="tab">
+                <input class="item_input" type="checkbox" id="id1">
+                <label class="trigger" for="id1">
+                    <center>
+                        <p>Список на показ</p>
+                    </center>
+                </label>
+                <div class="content">
+                    <table class="table_price">
+                        <tr>
+                            <td>
+                                <h3>Слово</h3>
+                            </td>
+                            <td>
+                                <h3>Перевод</h3>
+                            </td>
+                            <td>
+                                <h3>Частота</h3>
+                            </td>
+                        </tr>
+                        {{ range . }}
+                        {{ if eq .Freq 0 }} {{continue}} {{ end }}
+                        <tr>
+                            <td >
+                                <p>{{ if eq .Freq 3 1 2 4 5 }} {{ .Fword }} {{ end }}</p>
+                            </td>
+                            <td>
+                                <p>{{ if eq .Freq 3 1 2 4 5 }} {{ .Sword }} {{ end }}</p>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ if eq .Freq 3 }} Обычно
+                                    {{ else if eq .Freq 1 }} Оч.Редко
+                                    {{ else if eq .Freq 2 }} Редко
+                                    {{ else if eq .Freq 4 }} Често
+                                    {{ else if eq .Freq 5 }} Оч.Часто
+                                    {{ end }}</p>
+                            </td>
+                            <td><a>Select</a></td>
+                        </tr>
+                        {{ end }}
+                    </table>
+                </div>
+            </div>
 
+            <div class="tab">
+                <input class="item_input" type="checkbox" id="id2">
+                <label class="trigger" for="id2">
+                    <center>
+                        <p>Слова, убранные из показа</p>
+                    </center>
+                </label>
+                <div class="content">
+                    <table class="table_price">
+                        <tr>
+                            <td>
+                                <h3>Слово</h3>
+                            </td>
+                            <td colspan="2">
+                                <h3>Перевод</h3>
+                            </td>
+                        </tr>
+                        {{ range . }}
+                        {{ if eq .Freq 1 2 3 4 5 }} {{continue}} {{ end }}
+                        <tr>
+                            <td>
+                                <p>{{ if eq .Freq 0 }} {{ .Fword }} {{ end }}</p>
+                            </td>
+                            <td>
+                                <p>{{ if eq .Freq 0 }} {{ .Sword }} {{ end }}</p>
+                            </td>
+                            <td><a>Select</a></td>
+                        </tr>
+                        {{ end }}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </center>
+</body>
 
 
 {{ template "footer" }}

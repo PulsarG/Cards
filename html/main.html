@@ -23,21 +23,19 @@
             <center>
                 <div class="maincards">
                     <button class="card one">
-                        <p> {{ .Fword }}</p>
+                        <p class="cardword">{{ .Fword }}</p>
                     </button>
                     <div class="threebtn one">
-                        <form action="/" target="">
+                        
                                 <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
-                        </form>
-                        <form action="/" target="">
+                       
                                 <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
-                        </form>
-                        <form action="/" target="">
+                       
                                 <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
-                        </form>
+                        
                     </div>
                     <button class="card one cardopacity" id="twobtn" onclick="ShowTwoBtnText(this);">
-                        <p>{{.Sword }}</p>
+                        <p class="cardword">{{.Sword }}</p>
                     </button>
                 </div>
             </center>
@@ -58,7 +56,7 @@
         </div>
 
         <div class="left">
-            <form action="/" target="">
+            <form>
                 <button onclick="HiddenTwoBtnText('twobtn');" class="hiddenword">Не показывать</button>
             </form>
         </div>
