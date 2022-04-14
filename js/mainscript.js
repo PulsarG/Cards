@@ -1,5 +1,3 @@
-let xttp = new XMLHttpRequest();
-
 
 
 function ShowTwoBtnText(Element) {
@@ -9,10 +7,6 @@ function ShowTwoBtnText(Element) {
 function HiddenTwoBtnText(n) {
     s = document.getElementById(n).style;
     s.backgroundColor = 'black';
-
-    xttp.addEventListener("load", "Next()")
-    xttp.open("get", "main.go", true);
-    xttp.send();
 }
 
 function HiddenLearn(Element) {

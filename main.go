@@ -25,7 +25,7 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 
 	m, _ := template.ParseFiles("html/main.html", "html/header.html", "html/footer.html")
 
-	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
+	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words` WHERE freq > 0"))
 	if err != nil {
 		panic(err)
 	}
@@ -43,12 +43,14 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 		wordsarray = append(wordsarray, sw)
 	}
 
-	//show := Next(wordsarray)
+	show := Next(wordsarray)
 
+	m.ExecuteTemplate(w, "main", show)
 	//w.Header().Set("Content-Type", "text/html")
-	m.ExecuteTemplate(w, "main", Next(wordsarray))
-	
+	//m.ExecuteTemplate(w, "main", show)
+
 }
+
 
 func Next(st []WordsStruct) WordsStruct {
 	rand.Seed(time.Now().Unix())
@@ -117,6 +119,7 @@ func StartFunc() {
 	rtr.HandleFunc("/", MainPage)
 	rtr.HandleFunc("/list", List)
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
+	//rtr.HandleFunc("/hello", helloHandler)
 
 	http.ListenAndServe(":5500", nil)
 }

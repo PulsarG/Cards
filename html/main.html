@@ -26,13 +26,9 @@
                         <p class="cardword">{{ .Fword }}</p>
                     </button>
                     <div class="threebtn one">
-                        
                                 <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
-                       
                                 <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
-                       
                                 <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
-                        
                     </div>
                     <button class="card one cardopacity" id="twobtn" onclick="ShowTwoBtnText(this);">
                         <p class="cardword">{{.Sword }}</p>
@@ -43,10 +39,10 @@
             <center>
                 <form action="/addwords" method="post" class="form">
                     <div>
-                        <input type="text" name="firstword" id="firstword" class="inn" placeholder="Иностарнное слово">
+                        <input required autocomplete="off" type="text" name="firstword" id="firstword" class="inn" placeholder="Иностарнное слово">
                     </div>
                     <div>
-                        <input type="text" name="secondword" id="secondword" class="inn" placeholder="Перевод">
+                        <input required autocomplete="off" type="text" name="secondword" id="secondword" class="inn" placeholder="Перевод">
                     </div>
                     <div>
                         <button class="btnadd">Добавить</button>
