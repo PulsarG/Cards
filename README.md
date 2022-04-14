@@ -5,4 +5,5 @@
 
 Карточки для запоминания иностранных слов.
 
-![alt tag](https://cdn.discordapp.com/attachments/656618452135444503/964051253946642452/unknown.png "Описание будет тут")​
+![alt tag](https://cdn.discordapp.com/attachments/656618452135444503/964051253946642452/unknown.png "Главная страница")​
+![alt tag](https://cdn.discordapp.com/attachments/656618452135444503/964051537036988436/unknown.png "Страница со списком")​
