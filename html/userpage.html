@@ -1,0 +1,53 @@
+{{ define "userpage" }}
+
+{{ template "header" }}
+
+<body>
+    <div class="grid">
+        <input class="logpasscheck" type="checkbox">
+        <div class="logpasgrid">
+            <div class="login">
+                <form action="" method="post" class="logindiv">
+                    <div>
+                        <input required autocomplete="off" type="text" name="login" id="login" placeholder="Логин">
+                    </div>
+                    <div>
+                        <input required autocomplete="off" type="password" name="password" id="password"
+                            placeholder="Пароль">
+                    </div>
+                    <div>
+                        <button>Войти</button>
+                    </div>
+                </form>
+            </div>
+            <div class="reg">
+                <form action="" method="post" class="logindiv">
+                    <div>
+                        <input required autocomplete="off" type="text" name="login" id="login" placeholder="Логин">
+                    </div>
+                    <div>
+                        <input required autocomplete="off" type="email" name="email" id="email" placeholder="Почта">
+                    </div>
+                    <div>
+                        <input required autocomplete="off" type="password" name="password" id="password"
+                            placeholder="Пароль">
+                    </div>
+                    <div>
+                        <button>Регистрация</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="user">
+            <h3>Nickname</h3>
+            <h4>Количество карточек: </h4>
+            <form action="">
+                <button>Выйти</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+{{ template "footer" }}
+
+{{ end }}

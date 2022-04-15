@@ -21,10 +21,9 @@ type WordsStruct struct { // выгрузка БД
 
 var database *sql.DB
 
-func MainPage(w http.ResponseWriter, r *http.Request) {
+var words []WordsStruct
 
-	m, _ := template.ParseFiles("html/main.html", "html/header.html", "html/footer.html")
-
+func LoadWords() ([]WordsStruct, error) {
 	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words` WHERE freq > 0"))
 	if err != nil {
 		panic(err)
@@ -42,15 +41,25 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 		}
 		wordsarray = append(wordsarray, sw)
 	}
+	return wordsarray, nil
+}
 
-	show := Next(wordsarray)
+func MainPage(w http.ResponseWriter, r *http.Request) {
+
+	m, _ := template.ParseFiles("html/main.html", "html/header.html", "html/footer.html")
+
+	words, err := LoadWords()
+	if err != nil {
+		panic(err)
+	}
+
+	show := Next(words)
 
 	m.ExecuteTemplate(w, "main", show)
 	//w.Header().Set("Content-Type", "text/html")
 	//m.ExecuteTemplate(w, "main", show)
 
 }
-
 
 func Next(st []WordsStruct) WordsStruct {
 	rand.Seed(time.Now().Unix())
@@ -96,13 +105,22 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 		}
 		defer db.Close()
 
-		insert, err := db.Query(fmt.Sprintf("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES ('%s', '%s', '%d')", firstWord, secondWord, frequens))
-		if err != nil {
+		//insert, err := 
+		db.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES (?, ?, ?)", firstWord, secondWord, frequens)
+		/* if err != nil {
 			panic(err)
-		}
-		defer insert.Close()
+		} */
+		//defer insert.Close()
 		http.Redirect(w, r, "/", 301)
 	}
+}
+
+func LoginPage(w http.ResponseWriter, r *http.Request) {
+	m, err := template.ParseFiles("html/userpage.html", "html/header.html", "html/footer.html")
+	if err != nil {
+		panic(err)
+	}
+	m.ExecuteTemplate(w, "userpage", nil)
 }
 
 // *****************************************************************************************************************************************************************
@@ -119,6 +137,7 @@ func StartFunc() {
 	rtr.HandleFunc("/", MainPage)
 	rtr.HandleFunc("/list", List)
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
+	rtr.HandleFunc("/user", LoginPage)
 	//rtr.HandleFunc("/hello", helloHandler)
 
 	http.ListenAndServe(":5500", nil)
@@ -134,6 +153,11 @@ func main() {
 
 	database = db
 	defer db.Close()
+
+	/* words, err := LoadWords()
+	if err != nil {
+		panic(err)
+	} */
 
 	StartFunc()
 }

@@ -74,12 +74,13 @@
     color: black;
 }
 
-/* .grid {
-    margin-top: 50px;
-    display: inline-block;
-} */
+.grid {
+    display: flex;
+
+}
 
 .gridd {
+    margin: 10%;
     float: left;
 }
 
@@ -112,8 +113,8 @@
 }
 
 .footdiv {
-margin-top: 3%;
-margin-left: 46.5%;
+    margin-top: 3%;
+    margin-left: 46.5%;
 }
 
 .grid {
@@ -155,23 +156,18 @@ margin-left: 46.5%;
     padding: 20px;
     border-top: none;
     display: none;
-  /*   border: 1px solid black; */
+    /*   border: 1px solid black; */
 }
 
-.item_input:checked~.trigger {
-    
-}
+.item_input:checked~.trigger {}
 
 .item_input:checked~.content {
     display: block;
-    
 }
 
 
 
-************
-
-.table_price {
+************ .table {
     border-collapse: collapse;
     border-left: 3px solid #F79361;
     border-right: 3px solid #F79361;
@@ -179,7 +175,7 @@ margin-left: 46.5%;
     font-family: "Lucida Grande", sans-serif;
 }
 
-.table_price caption {
+.table caption {
     background: #F79361;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -193,25 +189,25 @@ margin-left: 46.5%;
     margin: 0;
 }
 
-.table_price td,
-.table_price th {
+.table td,
+.table th {
     padding: 10px;
 }
 
-.table_price th {
+.table th {
     text-align: left;
     font-size: 18px;
 }
 
-.table_price tr:nth-child(2n) {
+.table tr:nth-child(2n) {
     background: #E5E5E5;
 }
 
-.table_price td:last-of-type {
+.table td:last-of-type {
     text-align: center;
 }
 
-.table_price a {
+.table a {
     display: inline-block;
     padding: 5px 10px;
     background: #F79361;
@@ -219,8 +215,87 @@ margin-left: 46.5%;
     position: relative;
 }
 
-.table_price a:hover {
+.table a:hover {
     box-shadow: none;
     top: 2px;
     left: 2px;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+     border: 1px solid black;
+    justify-items: center;
+}
+
+.login div {
+    padding: 10px;
+}
+
+.login button {
+    justify-self: center;
+    height: 30px;
+    width: 100px;
+}
+
+.login input {
+    width: 300px;
+    height: 20px;
+}
+
+.reg {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+}
+
+.reg div {
+    padding: 10px;
+}
+
+.reg button {
+    justify-content: center;
+    height: 30px;
+    width: 100px;
+}
+
+.reg input {
+    width: 300px;
+    height: 20px;
+}
+
+// *************************************************************************
+
+.logpasscheck {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.logpasgrid {
+    padding: 20px;
+    border-top: none;
+    display: none;
+    flex-direction: row;
+    /*   border: 1px solid black; */
+}
+
+.logpasscheck:checked~.logpasgrid {
+    display: block;
+    display: flex;
+}
+
+
+.user {
+    display: block;
+    display: flex;
+    flex-direction: column;
+    /*   border: 1px solid black; */
+}
+
+.logpasscheck:checked~.user {
+
+    padding: 20px;
+    display: none;
 }
