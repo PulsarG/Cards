@@ -167,7 +167,7 @@
 
 
 
-************ .table {
+.table {
     border-collapse: collapse;
     border-left: 3px solid #F79361;
     border-right: 3px solid #F79361;
@@ -224,7 +224,7 @@
 .login {
     display: flex;
     flex-direction: column;
-     border: 1px solid black;
+    border: 1px solid black;
     justify-items: center;
 }
 

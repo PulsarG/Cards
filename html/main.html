@@ -21,14 +21,20 @@
 
         <div class="">
             <center>
-                <div class="maincards">
-                    <button class="card one">
-                        <p class="cardword">{{ .Fword }}</p>
-                    </button>
-                    <div class="threebtn one">
-                                <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
-                                <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
-                                <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
+                <div class="maincards">                  
+                        <button class="card one">
+                            <p class="cardword">{{ .Fword }}</p>
+                        </button>
+                    <div class="threebtn one" method="get">
+                        <form action="/reg">
+                            <button disabled onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
+                        </form>
+                        <form>
+                            <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
+                        </form>
+                        <form>
+                            <button disabled onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
+                        </form>
                     </div>
                     <button class="card one cardopacity" id="twobtn" onclick="ShowTwoBtnText(this);">
                         <p class="cardword">{{.Sword }}</p>
@@ -53,7 +59,7 @@
 
         <div class="left">
             <form>
-                <button onclick="HiddenTwoBtnText('twobtn');" class="hiddenword">Не показывать</button>
+                <button disabled onclick="HiddenTwoBtnText('twobtn');" class="hiddenword">Не показывать</button>
             </form>
         </div>
     </div>

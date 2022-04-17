@@ -1,28 +1,12 @@
+{{ define "test2" }}
 
-<!DOCTYPE html>
-<html>
+{{ template "header" }}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Products</title>
-</head>
-
-<body>
-  
-    <table>
-        <thead>
-            <th>Id</th>
-            <th>Model</th>
-            <th>Company</th>
-            <th>Price</th>
-        </thead>
-      {{ range . }}
-        <tr>
-            <td>{{ .Sword}}</td>
-           
-        </tr>
-       {{ end }}
-    </table>
+<body>        
+{{ . }}  
 </body>
 
-</html>
+
+{{ template "footer" }}
+
+{{ end }}

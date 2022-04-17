@@ -2,17 +2,19 @@ package main
 
 import (
 	"database/sql"
+	//"encoding/json"
 	"fmt"
 	"html/template"
-	//"log"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
+	"log"
 	"math/rand"
 	"net/http"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
 )
 
-type WordsStruct struct { // выгрузка БД
+type WordsStruct struct {
 	Id    int
 	Fword string
 	Sword string
@@ -21,56 +23,70 @@ type WordsStruct struct { // выгрузка БД
 
 var database *sql.DB
 
-var words []WordsStruct
+//var wordss []WordsStruct
 
-func LoadWords() ([]WordsStruct, error) {
-	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words` WHERE freq > 0"))
+func LoadWords() ([]WordsStruct, WordsStruct, error) {
+	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	defer res.Close()
 
 	wordsarray := []WordsStruct{}
+	allwordsarray := []WordsStruct{}
 
 	for res.Next() {
 		var sw WordsStruct
 		err := res.Scan(&sw.Id, &sw.Fword, &sw.Sword, &sw.Freq)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			continue
 		}
-		wordsarray = append(wordsarray, sw)
+		if sw.Freq != 0 {
+			wordsarray = append(wordsarray, sw)
+		}
+		allwordsarray = append(allwordsarray, sw)
 	}
-	return wordsarray, nil
+
+	withoutZeroFreq := wordsarray[rand.Intn(len(wordsarray))]
+
+	return allwordsarray, withoutZeroFreq, nil
 }
 
 func MainPage(w http.ResponseWriter, r *http.Request) {
 
 	m, _ := template.ParseFiles("html/main.html", "html/header.html", "html/footer.html")
 
-	words, err := LoadWords()
+	_, words, err := LoadWords()
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	m.ExecuteTemplate(w, "main", words)
+
+	/* show := Next(words) */
+
+	//m.ExecuteTemplate(w, "main", words)
+
+	/* data, err := json.Marshal(show)
+	if err != nil {
+		log.Panicln(err)
+	}
+	fmt.Printf("%s\n", data) */
+}
+
+/* func Next(st []WordsStruct) WordsStruct {
+	shw := st[rand.Intn(len(st))]
+	return shw
+} */
+
+func List(w http.ResponseWriter, r *http.Request) {
+	m, err := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
 	if err != nil {
 		panic(err)
 	}
 
-	show := Next(words)
-
-	m.ExecuteTemplate(w, "main", show)
-	//w.Header().Set("Content-Type", "text/html")
-	//m.ExecuteTemplate(w, "main", show)
-
-}
-
-func Next(st []WordsStruct) WordsStruct {
-	rand.Seed(time.Now().Unix())
-	shw := st[rand.Intn(len(st))]
-	return shw
-}
-
-func List(w http.ResponseWriter, r *http.Request) {
-	m, _ := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
-
-	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
+	/* res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
 	if err != nil {
 		panic(err)
 	}
@@ -86,6 +102,10 @@ func List(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		wordsarray = append(wordsarray, sw)
+	} */
+	wordsarray, _, err := LoadWords()
+	if err != nil {
+		log.Println(err)
 	}
 
 	m.ExecuteTemplate(w, "list", wordsarray)
@@ -101,16 +121,17 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 	} else {
 		db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 		defer db.Close()
 
-		//insert, err := 
 		db.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES (?, ?, ?)", firstWord, secondWord, frequens)
-		/* if err != nil {
-			panic(err)
+
+		/* 	words, err := LoadWords()
+		if err != nil {
+			log.Println(err)
 		} */
-		//defer insert.Close()
+
 		http.Redirect(w, r, "/", 301)
 	}
 }
@@ -118,9 +139,13 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 func LoginPage(w http.ResponseWriter, r *http.Request) {
 	m, err := template.ParseFiles("html/userpage.html", "html/header.html", "html/footer.html")
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	m.ExecuteTemplate(w, "userpage", nil)
+}
+
+func RegNewUser(w http.ResponseWriter, r *http.Request) {
+	
 }
 
 // *****************************************************************************************************************************************************************
@@ -138,6 +163,7 @@ func StartFunc() {
 	rtr.HandleFunc("/list", List)
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
 	rtr.HandleFunc("/user", LoginPage)
+	rtr.HandleFunc("/reg", RegNewUser)
 	//rtr.HandleFunc("/hello", helloHandler)
 
 	http.ListenAndServe(":5500", nil)
@@ -145,10 +171,11 @@ func StartFunc() {
 
 func main() {
 
+	rand.Seed(time.Now().Unix())
+
 	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
 	if err != nil {
-		//log.Println(err)
-		panic(err)
+		log.Println(err)
 	}
 
 	database = db
@@ -156,7 +183,7 @@ func main() {
 
 	/* words, err := LoadWords()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	} */
 
 	StartFunc()
