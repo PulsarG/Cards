@@ -23,8 +23,6 @@ type WordsStruct struct {
 
 var database *sql.DB
 
-//var wordss []WordsStruct
-
 func LoadWords() ([]WordsStruct, WordsStruct, error) {
 	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
 	if err != nil {
@@ -63,22 +61,7 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	m.ExecuteTemplate(w, "main", words)
-
-	/* show := Next(words) */
-
-	//m.ExecuteTemplate(w, "main", words)
-
-	/* data, err := json.Marshal(show)
-	if err != nil {
-		log.Panicln(err)
-	}
-	fmt.Printf("%s\n", data) */
 }
-
-/* func Next(st []WordsStruct) WordsStruct {
-	shw := st[rand.Intn(len(st))]
-	return shw
-} */
 
 func List(w http.ResponseWriter, r *http.Request) {
 	m, err := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
@@ -86,23 +69,6 @@ func List(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	/* res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
-	if err != nil {
-		panic(err)
-	}
-	defer res.Close()
-
-	wordsarray := []WordsStruct{}
-
-	for res.Next() {
-		var sw WordsStruct
-		err := res.Scan(&sw.Id, &sw.Fword, &sw.Sword, &sw.Freq)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		wordsarray = append(wordsarray, sw)
-	} */
 	wordsarray, _, err := LoadWords()
 	if err != nil {
 		log.Println(err)
@@ -126,11 +92,6 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 		defer db.Close()
 
 		db.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES (?, ?, ?)", firstWord, secondWord, frequens)
-
-		/* 	words, err := LoadWords()
-		if err != nil {
-			log.Println(err)
-		} */
 
 		http.Redirect(w, r, "/", 301)
 	}
@@ -164,7 +125,6 @@ func StartFunc() {
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
 	rtr.HandleFunc("/user", LoginPage)
 	rtr.HandleFunc("/reg", RegNewUser)
-	//rtr.HandleFunc("/hello", helloHandler)
 
 	http.ListenAndServe(":5500", nil)
 }
@@ -180,11 +140,6 @@ func main() {
 
 	database = db
 	defer db.Close()
-
-	/* words, err := LoadWords()
-	if err != nil {
-		log.Println(err)
-	} */
 
 	StartFunc()
 }
