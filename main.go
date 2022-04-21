@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	//"encoding/json"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -21,10 +21,21 @@ type WordsStruct struct {
 	Freq  int
 }
 
+func (ws WordsStruct) UpdateFreqMinus() WordsStruct {
+	if ws.Freq > 1 {
+		ws.Freq -= 1
+	}
+	return ws
+}
+
 var database *sql.DB
 
+const CODE = 301
+
+var datas []byte
+
 func LoadWords() ([]WordsStruct, WordsStruct, error) {
-	res, err := database.Query(fmt.Sprintf("SELECT * FROM `words`"))
+	res, err := database.Query("SELECT * FROM `words`")
 	if err != nil {
 		log.Println(err)
 	}
@@ -60,8 +71,12 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 		log.Panicln(err)
 	}
 
+	datas, _ = json.Marshal(words)
+	fmt.Println(string(datas))
+
 	m.ExecuteTemplate(w, "main", words)
 }
+
 
 func List(w http.ResponseWriter, r *http.Request) {
 	m, err := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
@@ -83,7 +98,7 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 	frequens := 3
 
 	if firstWord == "" || secondWord == "" {
-		http.Redirect(w, r, "/", 301)
+		http.Redirect(w, r, "/", CODE)
 	} else {
 		db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
 		if err != nil {
@@ -93,7 +108,7 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 
 		db.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES (?, ?, ?)", firstWord, secondWord, frequens)
 
-		http.Redirect(w, r, "/", 301)
+		http.Redirect(w, r, "/", CODE)
 	}
 }
 
@@ -106,7 +121,7 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegNewUser(w http.ResponseWriter, r *http.Request) {
-	
+
 }
 
 // *****************************************************************************************************************************************************************
@@ -125,6 +140,7 @@ func StartFunc() {
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
 	rtr.HandleFunc("/user", LoginPage)
 	rtr.HandleFunc("/reg", RegNewUser)
+
 
 	http.ListenAndServe(":5500", nil)
 }

@@ -1,0 +1,80 @@
+[
+    {
+        "Id": 15,
+        "Fword": "home",
+        "Sword": "дом",
+        "Freq": 1
+    },
+    {
+        "Id": 17,
+        "Fword": "Thanks",
+        "Sword": "Спасибо",
+        "Freq": 3
+    },
+    {
+        "Id": 18,
+        "Fword": "Cat",
+        "Sword": "Кошка",
+        "Freq": 0
+    },
+    {
+        "Id": 19,
+        "Fword": "Dog",
+        "Sword": "Собака",
+        "Freq": 0
+    },
+    {
+        "Id": 20,
+        "Fword": "Cold",
+        "Sword": "Холод",
+        "Freq": 0
+    },
+    {
+        "Id": 21,
+        "Fword": "Ice",
+        "Sword": "Лед",
+        "Freq": 0
+    },
+    {
+        "Id": 22,
+        "Fword": "Cloud",
+        "Sword": "Облако",
+        "Freq": 0
+    },
+    {
+        "Id": 23,
+        "Fword": "Price",
+        "Sword": "Цена",
+        "Freq": 0
+    },
+    {
+        "Id": 24,
+        "Fword": "Rat",
+        "Sword": "Крыса",
+        "Freq": 0
+    },
+    {
+        "Id": 25,
+        "Fword": "Hot",
+        "Sword": "Горячий",
+        "Freq": 0
+    },
+    {
+        "Id": 26,
+        "Fword": "Hello",
+        "Sword": "Привет",
+        "Freq": 3
+    },
+    {
+        "Id": 27,
+        "Fword": "Number",
+        "Sword": "Номер",
+        "Freq": 3
+    },
+    {
+        "Id": 28,
+        "Fword": "Tea",
+        "Sword": "Чай",
+        "Freq": 3
+    }
+]

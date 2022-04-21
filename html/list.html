@@ -17,6 +17,7 @@
                 <div class="content">
                     <table class="table">
                         <tr>
+                            <td></td>
                             <td>
                                 <h3>Слово</h3>
                             </td>
@@ -26,10 +27,14 @@
                             <td>
                                 <h3>Частота</h3>
                             </td>
+                            <td></td>
                         </tr>
                         {{ range . }}
                         {{ if eq .Freq 0 }} {{continue}} {{ end }}
                         <tr>
+                            <td>
+                                <button>Реже</button>
+                            </td>
                             <td >
                                 <p>{{ if eq .Freq 3 1 2 4 5 }} {{ .Fword }} {{ end }}</p>
                             </td>
@@ -44,6 +49,9 @@
                                     {{ else if eq .Freq 4 }} Често
                                     {{ else if eq .Freq 5 }} Оч.Часто
                                     {{ end }}</p>
+                            </td>
+                            <td>
+                                <button>Чаще</button>
                             </td>
                            <!--  <td><a>Select</a></td> -->
                         </tr>
@@ -73,10 +81,16 @@
                         {{ if eq .Freq 1 2 3 4 5 }} {{continue}} {{ end }}
                         <tr>
                             <td>
+                                <button>Вернуть</button>
+                            </td>
+                            <td>
                                 <p>{{ if eq .Freq 0 }} {{ .Fword }} {{ end }}</p>
                             </td>
                             <td>
                                 <p>{{ if eq .Freq 0 }} {{ .Sword }} {{ end }}</p>
+                            </td>
+                            <td>
+                                <button>Удалить</button>
                             </td>
                             <!-- <td><a>Select</a></td> -->
                         </tr>

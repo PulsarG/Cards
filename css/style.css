@@ -270,32 +270,33 @@
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0;
+    opacity: 0.5;
 }
 
 .logpasgrid {
+    display: block;
+    display: flex;
     padding: 20px;
     border-top: none;
-    display: none;
     flex-direction: row;
     /*   border: 1px solid black; */
 }
 
 .logpasscheck:checked~.logpasgrid {
-    display: block;
-    display: flex;
+    display: none;
 }
 
-
 .user {
-    display: block;
-    display: flex;
-    flex-direction: column;
+    display: none;
     /*   border: 1px solid black; */
 }
 
 .logpasscheck:checked~.user {
+    display: block;
+    display: flex;
+    flex-direction: column;
+}
 
-    padding: 20px;
-    display: none;
+button {
+    cursor: pointer;
 }

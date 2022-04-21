@@ -21,13 +21,15 @@
 
         <div class="">
             <center>
-                <div class="maincards">                  
-                        <button class="card one">
+                <div class="maincards">
+                    <form>
+                        <button onclick="HiddenTwoBtnText('twobtn');" class="card one">
                             <p class="cardword">{{ .Fword }}</p>
                         </button>
+                    </form>
                     <div class="threebtn one" method="get">
-                        <form action="/reg">
-                            <button disabled onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
+                        <form>
+                            <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
                         </form>
                         <form>
                             <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
@@ -45,10 +47,12 @@
             <center>
                 <form action="/addwords" method="post" class="form">
                     <div>
-                        <input required autocomplete="off" type="text" name="firstword" id="firstword" class="inn" placeholder="Иностарнное слово">
+                        <input required autocomplete="off" type="text" name="firstword" id="firstword" class="inn"
+                            placeholder="Иностарнное слово">
                     </div>
                     <div>
-                        <input required autocomplete="off" type="text" name="secondword" id="secondword" class="inn" placeholder="Перевод">
+                        <input required autocomplete="off" type="text" name="secondword" id="secondword" class="inn"
+                            placeholder="Перевод">
                     </div>
                     <div>
                         <button class="btnadd">Добавить</button>
