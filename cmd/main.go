@@ -1,11 +1,13 @@
 package main
 
 import (
+	"github.com/PulsarG/Cards"
+	"github.com/PulsarG/Cards/pkc/handler"
 	"librarys/pkc/handler"
 	"log"
 )
 
-func main () {
+func main() {
 	handlers := new(handler.Handler)
 
 	srv := new(cards.Server)
