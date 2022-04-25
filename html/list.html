@@ -31,11 +31,12 @@
                         </tr>
                         {{ range . }}
                         {{ if eq .Freq 0 }} {{continue}} {{ end }}
+
                         <tr>
                             <td>
                                 <button>Реже</button>
                             </td>
-                            <td >
+                            <td>
                                 <p>{{ if eq .Freq 3 1 2 4 5 }} {{ .Fword }} {{ end }}</p>
                             </td>
                             <td>
@@ -53,8 +54,9 @@
                             <td>
                                 <button>Чаще</button>
                             </td>
-                           <!--  <td><a>Select</a></td> -->
+                            <!--  <td><a>Select</a></td> -->
                         </tr>
+
                         {{ end }}
                     </table>
                 </div>

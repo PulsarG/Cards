@@ -10,6 +10,8 @@ import (
 	"math/rand"
 	"net/http"
 	"time"
+	"strconv"
+	//"reflect"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -21,18 +23,6 @@ type WordsStruct struct {
 	Sword string
 	Freq  int
 	User  string
-}
-
-/* type UserLog struct {
-	Id int
-	Login, Email, Password string
-} */
-
-func (ws WordsStruct) UpdateFreqMinus() WordsStruct {
-	if ws.Freq > 1 {
-		ws.Freq -= 1
-	}
-	return ws
 }
 
 var database *sql.DB
@@ -81,7 +71,7 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	m.ExecuteTemplate(w, "main", words)
 }
 
-func GetData(w http.ResponseWriter, r *http.Request) {
+func SetData(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
@@ -91,7 +81,43 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 
 	_ = json.Unmarshal(body, &data)
-	fmt.Println(data)
+	/* fmt.Println(data["freqq"])
+	fmt.Println(data["idd"])
+
+	fmt.Println(reflect.TypeOf(data["freqq"]))
+	fmt.Println(reflect.TypeOf(data["idd"]))
+ */
+	freqqy := data["freqq"]
+	iddy := data["idd"]
+
+	s := fmt.Sprintf("%.0f", freqqy)
+	fr, _ := strconv.Atoi(s)
+
+	ss := fmt.Sprintf("%.0f", iddy)
+	iddd, _ := strconv.Atoi(ss)
+
+
+	/* db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
+	if err != nil {
+		log.Println(err)
+	}
+	defer db.Close() */
+
+	upd, _ := database.Prepare("UPDATE words SET freq = ? WHERE id = ?")
+	upd.Exec(fr, iddd)
+}
+
+func GetData(w http.ResponseWriter, r *http.Request) {
+	/* body, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Body.Close()
+
+	data := make(map[string]interface{})
+
+	_ = json.Unmarshal(body, &data)
+	fmt.Println(data) */
 
 	_, words, err := LoadWords()
 	if err != nil {
@@ -207,6 +233,7 @@ func StartFunc() {
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
 	rtr.HandleFunc("/user", LoginPage)
 	rtr.HandleFunc("/get", GetData)
+	rtr.HandleFunc("/set", SetData)
 	/* rtr.HandleFunc("/reg", RegNewUser)
 	rtr.HandleFunc("/login", LoginEnter) */
 
