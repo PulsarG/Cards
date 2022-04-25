@@ -1,10 +1,11 @@
-/* package main
+package main
 
 import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"math/rand"
 	"net/http"
@@ -19,7 +20,13 @@ type WordsStruct struct {
 	Fword string
 	Sword string
 	Freq  int
+	User  string
 }
+
+/* type UserLog struct {
+	Id int
+	Login, Email, Password string
+} */
 
 func (ws WordsStruct) UpdateFreqMinus() WordsStruct {
 	if ws.Freq > 1 {
@@ -46,7 +53,7 @@ func LoadWords() ([]WordsStruct, WordsStruct, error) {
 
 	for res.Next() {
 		var sw WordsStruct
-		err := res.Scan(&sw.Id, &sw.Fword, &sw.Sword, &sw.Freq)
+		err := res.Scan(&sw.Id, &sw.Fword, &sw.Sword, &sw.Freq, &sw.User)
 		if err != nil {
 			log.Println(err)
 			continue
@@ -71,12 +78,30 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 		log.Panicln(err)
 	}
 
-	datas, _ = json.Marshal(words)
-	fmt.Println(string(datas))
-
 	m.ExecuteTemplate(w, "main", words)
 }
 
+func GetData(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Body.Close()
+
+	data := make(map[string]interface{})
+
+	_ = json.Unmarshal(body, &data)
+	fmt.Println(data)
+
+	_, words, err := LoadWords()
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	datas, _ = json.Marshal(words)
+
+	w.Write(datas)
+}
 
 func List(w http.ResponseWriter, r *http.Request) {
 	m, err := template.ParseFiles("html/list.html", "html/header.html", "html/footer.html")
@@ -106,7 +131,7 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 		}
 		defer db.Close()
 
-		db.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES (?, ?, ?)", firstWord, secondWord, frequens)
+		db.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES (?, ?, ?, ?)", firstWord, secondWord, frequens)
 
 		http.Redirect(w, r, "/", CODE)
 	}
@@ -120,9 +145,51 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	m.ExecuteTemplate(w, "userpage", nil)
 }
 
-func RegNewUser(w http.ResponseWriter, r *http.Request) {
+/* func RegNewUser(w http.ResponseWriter, r *http.Request) {
+	login := r.FormValue("login")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+
+	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
+		if err != nil {
+			log.Println(err)
+		}
+		defer db.Close()
+
+	db.Exec("INSERT INTO `user` (`login`, `email`, `password`) VALUES (?, ?, ?)", login, email, password)
+
+	http.Redirect(w, r, "/user", CODE)
 
 }
+
+func LoginEnter(w http.ResponseWriter, r *http.Request) {
+	loginn := r.FormValue("login")
+	passwordd := r.FormValue("password")
+
+
+	res, err := database.Query("SELECT * FROM `user`")
+	if err != nil {
+		log.Println(err)
+	}
+	defer res.Close()
+
+
+	for res.Next() {
+		var sw UserLog
+		err := res.Scan(&sw.Id, &sw.Login, &sw.Email, &sw.Password)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if sw.Login == loginn && sw.Password == passwordd {
+				http.Redirect(w, r, "/", CODE)
+				logName = loginn
+			} else {
+				http.Redirect(w, r, "/user", CODE)
+			}
+	}
+} */
 
 // *****************************************************************************************************************************************************************
 
@@ -139,8 +206,9 @@ func StartFunc() {
 	rtr.HandleFunc("/list", List)
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
 	rtr.HandleFunc("/user", LoginPage)
-	rtr.HandleFunc("/reg", RegNewUser)
-
+	rtr.HandleFunc("/get", GetData)
+	/* rtr.HandleFunc("/reg", RegNewUser)
+	rtr.HandleFunc("/login", LoginEnter) */
 
 	http.ListenAndServe(":5500", nil)
 }
@@ -159,4 +227,3 @@ func main() {
 
 	StartFunc()
 }
- */
