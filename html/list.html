@@ -31,24 +31,21 @@
                         </tr>
                         {{ range . }}
                         {{ if eq .Freq 0 }} {{continue}} {{ end }}
-
                         <tr>
                             <td>
                                 <button>Реже</button>
                             </td>
                             <td>
-                                <p>{{ if eq .Freq 3 1 2 4 5 }} {{ .Fword }} {{ end }}</p>
+                                <p>{{ if eq .Freq 3 1 2 }} {{ .Fword }} {{ end }}</p>
                             </td>
                             <td>
-                                <p>{{ if eq .Freq 3 1 2 4 5 }} {{ .Sword }} {{ end }}</p>
+                                <p>{{ if eq .Freq 3 1 2 }} {{ .Sword }} {{ end }}</p>
                             </td>
                             <td>
                                 <p>
                                     {{ if eq .Freq 3 }} Обычно
                                     {{ else if eq .Freq 1 }} Оч.Редко
                                     {{ else if eq .Freq 2 }} Редко
-                                    {{ else if eq .Freq 4 }} Често
-                                    {{ else if eq .Freq 5 }} Оч.Часто
                                     {{ end }}</p>
                             </td>
                             <td>
@@ -80,7 +77,7 @@
                             </td>
                         </tr>
                         {{ range . }}
-                        {{ if eq .Freq 1 2 3 4 5 }} {{continue}} {{ end }}
+                        {{ if eq .Freq 1 2 3 }} {{continue}} {{ end }}
                         <tr>
                             <td>
                                 <button>Вернуть</button>

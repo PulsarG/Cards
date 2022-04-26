@@ -23,7 +23,7 @@
             <center>
                 <div class="maincards">
 
-                    <button onclick="HiddenTwoBtnText('twobtn');" class="card one">
+                    <button id="get0" class="card one">
                         <p class="cardword" id="one">{{ .Fword }}</p>
                     </button>
 
@@ -33,7 +33,7 @@
 
                         <button id="get" class="btnnext">Далее</button>
 
-                        <button id="get2" class="btnnext">Чаще</button>
+                        <button id="get2" name="more" class="btnnext">Чаще</button>
 
                     </div>
 
@@ -63,7 +63,7 @@
 
         <div class="left">
             <form>
-                <button disabled onclick="HiddenTwoBtnText('twobtn');" class="hiddenword">Не показывать</button>
+                <button id="get3" class="hiddenword">Не показывать</button>
             </form>
         </div>
     </div>

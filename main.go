@@ -9,8 +9,8 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 	//"reflect"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -63,12 +63,14 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 
 	m, _ := template.ParseFiles("html/main.html", "html/header.html", "html/footer.html")
 
-	_, words, err := LoadWords()
+	/* _, words, err := LoadWords()
 	if err != nil {
 		log.Panicln(err)
-	}
+	} */
 
-	m.ExecuteTemplate(w, "main", words)
+	helloVar := WordsStruct{Fword: "Нажми меня", Sword: "Press Me"}
+
+	m.ExecuteTemplate(w, "main", helloVar)
 }
 
 func SetData(w http.ResponseWriter, r *http.Request) {
@@ -81,12 +83,7 @@ func SetData(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 
 	_ = json.Unmarshal(body, &data)
-	/* fmt.Println(data["freqq"])
-	fmt.Println(data["idd"])
 
-	fmt.Println(reflect.TypeOf(data["freqq"]))
-	fmt.Println(reflect.TypeOf(data["idd"]))
- */
 	freqqy := data["freqq"]
 	iddy := data["idd"]
 
@@ -96,29 +93,12 @@ func SetData(w http.ResponseWriter, r *http.Request) {
 	ss := fmt.Sprintf("%.0f", iddy)
 	iddd, _ := strconv.Atoi(ss)
 
-
-	/* db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
-	if err != nil {
-		log.Println(err)
-	}
-	defer db.Close() */
-
 	upd, _ := database.Prepare("UPDATE words SET freq = ? WHERE id = ?")
 	upd.Exec(fr, iddd)
 }
 
 func GetData(w http.ResponseWriter, r *http.Request) {
-	/* body, err := io.ReadAll(r.Body)
-	if err != nil {
-		panic(err)
-	}
-	defer r.Body.Close()
-
-	data := make(map[string]interface{})
-
-	_ = json.Unmarshal(body, &data)
-	fmt.Println(data) */
-
+	
 	_, words, err := LoadWords()
 	if err != nil {
 		log.Panicln(err)
@@ -147,20 +127,11 @@ func AddWords(w http.ResponseWriter, r *http.Request) {
 	firstWord := r.FormValue("firstword")
 	secondWord := r.FormValue("secondword")
 	frequens := 3
+	user := "admin"
 
-	if firstWord == "" || secondWord == "" {
-		http.Redirect(w, r, "/", CODE)
-	} else {
-		db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
-		if err != nil {
-			log.Println(err)
-		}
-		defer db.Close()
+	database.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`, `user`) VALUES (?, ?, ?, ?)", firstWord, secondWord, frequens, user)
 
-		db.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`) VALUES (?, ?, ?, ?)", firstWord, secondWord, frequens)
-
-		http.Redirect(w, r, "/", CODE)
-	}
+	http.Redirect(w, r, "/", CODE)
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
@@ -170,52 +141,6 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	}
 	m.ExecuteTemplate(w, "userpage", nil)
 }
-
-/* func RegNewUser(w http.ResponseWriter, r *http.Request) {
-	login := r.FormValue("login")
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/wordcard")
-		if err != nil {
-			log.Println(err)
-		}
-		defer db.Close()
-
-	db.Exec("INSERT INTO `user` (`login`, `email`, `password`) VALUES (?, ?, ?)", login, email, password)
-
-	http.Redirect(w, r, "/user", CODE)
-
-}
-
-func LoginEnter(w http.ResponseWriter, r *http.Request) {
-	loginn := r.FormValue("login")
-	passwordd := r.FormValue("password")
-
-
-	res, err := database.Query("SELECT * FROM `user`")
-	if err != nil {
-		log.Println(err)
-	}
-	defer res.Close()
-
-
-	for res.Next() {
-		var sw UserLog
-		err := res.Scan(&sw.Id, &sw.Login, &sw.Email, &sw.Password)
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-
-		if sw.Login == loginn && sw.Password == passwordd {
-				http.Redirect(w, r, "/", CODE)
-				logName = loginn
-			} else {
-				http.Redirect(w, r, "/user", CODE)
-			}
-	}
-} */
 
 // *****************************************************************************************************************************************************************
 

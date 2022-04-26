@@ -4,31 +4,10 @@ function ShowTwoBtnText(Element) {
     Element.style.backgroundColor = 'white';
 }
 
-
-
-
-function HiddenTwoBtnText(n) {
-    console.log(123)
-    let response = fetch('http://localhost:5500/get');
-    console.log(response)
-
-    if (response.ok) {
-        let data = response.json();
-        console.log(data)
-
-        // document.getElementById(n).innerHTML =      
-    } else {
-        alert("cant get word")
-    }
-
-    s = document.getElementById(n).style;
-    s.backgroundColor = 'black';
-}
-
 function setLowFreq() {
     el = getData();
 
-    if (el.Freq > 1 ) {
+    if (el.Freq > 1) {
         el.Freq -= 1
     }
 
@@ -41,9 +20,20 @@ function setLowFreq() {
 function setHiFreq() {
     el = getData();
 
-    if (el.Freq < 5) {
+    if (el.Freq < 3) {
         el.Freq += 1
     }
+
+    let freqq = el.Freq;
+    let idd = el.Id;
+
+    let response = fetch('http://localhost:5500/set', { method: 'post', body: JSON.stringify({ freqq, idd }) })
+}
+
+function setFreqZero() {
+    el = getData();
+
+    el.Freq = 0;
 
     let freqq = el.Freq;
     let idd = el.Id;
@@ -56,16 +46,25 @@ function getData() {
         .then((resp) => resp.json())
         .then(function (data) {
             elm = data;
-            /* randDataEl = data[Math.floor(Math.random() * data.length)] */
-            document.getElementById('one').innerHTML = data.Fword;
-            document.getElementById('answer').innerHTML = data.Sword;
+            randEl = Math.floor(Math.random() * 3)
+            if (randEl == 1 && data.Freq == 1) {
+                toHtml(data);
+                document.getElementById('get2').removeAttribute('disabled');
+                document.getElementById('get1').setAttribute('disabled', true);
+            } else if (randEl > 1 && data.Freq == 2) {
+                toHtml(data);
+                document.getElementById('get2').removeAttribute('disabled');
+            } else if (data.Freq == 3) {
+                toHtml(data);
+                document.getElementById('get2').setAttribute('disabled', true);
+                document.getElementById('get1').removeAttribute('disabled');
+            } else {
+                getData()
+            }
         })
         .catch(function (error) {
             console.log(error)
         })
-
-    /* document.getElementById('one').innerHTML = randDataEl.Fword;
-    document.getElementById('answer').innerHTML = randDataEl.Sword; */
 
     s = document.getElementById("twobtn").style;
     if (s.backgroundColor != 'black') {
@@ -73,6 +72,11 @@ function getData() {
     }
 
     return elm
+}
+
+function toHtml(data) {
+    document.getElementById('one').innerHTML = data.Fword;
+    document.getElementById('answer').innerHTML = data.Sword;
 }
 
 function HiddenLearn(Element) {
@@ -84,5 +88,7 @@ function HiddenLearn(Element) {
 }
 
 document.getElementById("get").addEventListener("click", getData);
+document.getElementById("get0").addEventListener("click", getData);
 document.getElementById("get1").addEventListener("click", setLowFreq);
 document.getElementById("get2").addEventListener("click", setHiFreq);
+document.getElementById("get3").addEventListener("click", setFreqZero);
