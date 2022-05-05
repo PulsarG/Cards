@@ -1,84 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Cards</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 </head>
-<header>
-    <center>
-        <div class="menu centerdiv">
-            <button class="btn">Карточки</button>
-            <button class="btn">Список</button>
-            <button class="btn">Other</button>
-        </div>
-    </center>
-</header>
-
 <body>
-
-    <div class="grid">
-
-        <button onclick="HiddenLearn(this);" class="left learnbtn">
-            <div>
-                <p class="learntext">Нажмите на черную кнопку чтобы увидеть перевод.</p>
-                <p class="learntext">Выберите действие для карточки: показывать Реже или Чаще. Или просто далее,
-                    если сложность
-                    устраивает</p>
-                <p class="learntext">Выберите Не показывать, если выучили слово. Оно останется в списке, и вы всегда
-                    можете вновь
-                    добавить его в показ.</p>
-                <p class="learntext">Чтобы добваить слова просто заполните форму и нажмите Добавить</p>
-                <p class="learntext">Чтобы скрыть эту подсказку нажмите на любую часть текста</p>
-            </div>
-        </button>
-
-        <div class="">
-            <center>
-                <div class="maincards">
-                    <button class="card one">
-                        <p>Hello</p>
-                    </button>
-                    <div class="threebtn one">
-                        <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Реже</button>
-                        <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Далее</button>
-                        <button onclick="HiddenTwoBtnText('twobtn');" class="btnnext">Чаще</button>
-                    </div>
-                    <button class="card one cardopacity" id="twobtn" onclick="ShowTwoBtnText(this);">
-                        <p>Привет</p>
-                    </button>
-                </div>
-            </center>
-            <center>
-                <div class="addwords">
-                    <form action="signin" method="post" class="form">
-                        <input type="text" name="firstword" class="inn" placeholder="Иностарнное слово">
-                    </form>
-                    <form action="signin" method="post" class="form">
-                        <input type="text" name="seconword" class="inn" placeholder="Перевод">
-                    </form>
-                    <button class="btnadd form">Добавить</button>
-                </div>
-            </center>
-        </div>
-
-        <div class="left">
-            <button onclick="HiddenTwoBtnText('twobtn');" class="hiddenword">Не показывать</button>
-        </div>
+    <div id="app">
+        {{ message }}
     </div>
-
 </body>
-
-<footer>
-    <script src="../js/mainscript.js"></script>
-    <div class="footdiv">
-
-        <a class="fottertext" href="http://Github.com/PulsarG">Github.com/PulsarG</a>
-    </div>
-
-</footer>
-
 </html>
+<footer>
+    <script src="../js/vuescript.js"></script>
+</footer>
