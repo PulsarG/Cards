@@ -12,9 +12,6 @@ import (
 	"strconv"
 	"time"
 
-	//"reflect"
-	//"crypto/rand"
-
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 )
@@ -27,6 +24,13 @@ type WordsStruct struct {
 	User  string
 }
 
+type User struct {
+	Id       int
+	Login    string
+	Email    string
+	Password string
+}
+
 var database *sql.DB
 
 const CODE = 301
@@ -34,6 +38,8 @@ const CODE = 301
 const (
 	COOKIE_NAME = "sessionId"
 )
+
+var UserName = "Guest"
 
 var datas []byte
 
@@ -77,7 +83,7 @@ func (s *Session) Get(sessionId string) string {
 	if data == nil {
 		return ""
 	}
-
+	UserName = data.Username
 	return data.Username
 }
 
@@ -181,14 +187,28 @@ func List(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddWords(w http.ResponseWriter, r *http.Request) {
-	firstWord := r.FormValue("firstword")
-	secondWord := r.FormValue("secondword")
-	frequens := 3
-	user := "admin"
+	user := UserName
 
-	database.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`, `user`) VALUES (?, ?, ?, ?)", firstWord, secondWord, frequens, user)
+	if user == "Guest" {
+		http.Redirect(w, r, "/errorlogin", CODE)
+	} else {
 
-	http.Redirect(w, r, "/", CODE)
+		firstWord := r.FormValue("firstword")
+		secondWord := r.FormValue("secondword")
+		frequens := 3
+
+		database.Exec("INSERT INTO `words` (`firstword`, `secondword`, `freq`, `user`) VALUES (?, ?, ?, ?)", firstWord, secondWord, frequens, user)
+
+		http.Redirect(w, r, "/", CODE)
+	}
+}
+
+func errorLogin(w http.ResponseWriter, r *http.Request) {
+	m, err := template.ParseFiles("html/errorlogin.html", "html/header.html", "html/footer.html")
+	if err != nil {
+		log.Println(err)
+	}
+	m.ExecuteTemplate(w, "errorlogin", nil)
 }
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
@@ -196,25 +216,52 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	m.ExecuteTemplate(w, "userpage", nil)
+
+	User := UserName
+
+	m.ExecuteTemplate(w, "userpage", User)
+
 }
 
 func PostLoginPage(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("login")
-	//password := r.FormValue("password")
+	password := r.FormValue("password")
+	var pass string
+	res, _ := database.Query("SELECT password FROM user WHERE login = ?", username)
 
-	/* fmt.Println(username)
-	fmt.Println(password) */
-
-	sessionId := inMemorySession.Init(username)
-
-	cookie := http.Cookie{
-		Name:    COOKIE_NAME,
-		Value:   sessionId,
-		Expires: time.Now().Add(5 * time.Second),
+	for res.Next() {
+		err := res.Scan(&pass)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(pass)
 	}
 
-	http.SetCookie(w, &cookie)
+	if pass != password {
+		http.Redirect(w, r, "/errorlogin", CODE)
+	} else {
+		sessionId := inMemorySession.Init(username)
+
+		cookie := http.Cookie{
+			Name:    COOKIE_NAME,
+			Value:   sessionId,
+			Expires: time.Now().Add(5 * time.Minute),
+		}
+
+		http.SetCookie(w, &cookie)
+
+		UserName = username
+
+		http.Redirect(w, r, "/", CODE)
+	}
+}
+
+func RegistationPage(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("login")
+	password := r.FormValue("password")
+	email := r.FormValue("email")
+
+	database.Exec("INSERT INTO `user` (`login`, `email`, `password`) VALUES (?, ?, ?)", username, email, password)
 
 	http.Redirect(w, r, "/", CODE)
 }
@@ -235,6 +282,8 @@ func StartFunc() {
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
 	rtr.HandleFunc("/user", LoginPage)
 	rtr.HandleFunc("/login", PostLoginPage)
+	rtr.HandleFunc("/reg", RegistationPage)
+	rtr.HandleFunc("/errorlogin", errorLogin)
 	rtr.HandleFunc("/get", GetData)
 	rtr.HandleFunc("/set", SetData)
 	/* rtr.HandleFunc("/reg", RegNewUser)
