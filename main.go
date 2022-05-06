@@ -11,11 +11,9 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-	//"reflect"
 
-	//"./utils"
-	"Cards/session"
-	"github.com/PulsarG/Cards/session"
+	//"reflect"
+	//"crypto/rand"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -30,7 +28,6 @@ type WordsStruct struct {
 }
 
 var database *sql.DB
-var inMemorySession *session.Session
 
 const CODE = 301
 
@@ -39,6 +36,52 @@ const (
 )
 
 var datas []byte
+
+var inMemorySession *Session
+
+func GenerateId() string {
+	b := make([]byte, 16)
+	rand.Read(b)
+	return fmt.Sprintf("%x", b)
+}
+
+type sessionData struct {
+	Username string
+}
+
+type Session struct {
+	data map[string]*sessionData
+}
+
+func NewSession() *Session {
+	s := new(Session)
+
+	s.data = make(map[string]*sessionData)
+
+	return s
+}
+
+func (s *Session) Init(username string) string {
+	sessionId := GenerateId()
+
+	data := &sessionData{Username: username}
+
+	s.data[sessionId] = data
+
+	return sessionId
+}
+
+func (s *Session) Get(sessionId string) string {
+	data := s.data[sessionId]
+
+	if data == nil {
+		return ""
+	}
+
+	return data.Username
+}
+
+// **************************************************************************************************************************************************************
 
 func LoadWords() ([]WordsStruct, WordsStruct, error) {
 	res, err := database.Query("SELECT * FROM `words`")
@@ -69,6 +112,11 @@ func LoadWords() ([]WordsStruct, WordsStruct, error) {
 }
 
 func MainPage(w http.ResponseWriter, r *http.Request) {
+
+	cookie, _ := r.Cookie(COOKIE_NAME)
+	if cookie != nil {
+		fmt.Println(inMemorySession.Get(cookie.Value))
+	}
 
 	m, _ := template.ParseFiles("html/main.html", "html/header.html", "html/footer.html")
 
@@ -153,17 +201,17 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 
 func PostLoginPage(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("login")
-	password := r.FormValue("password")
+	//password := r.FormValue("password")
 
-	fmt.Println(username)
-	fmt.Println(password)
+	/* fmt.Println(username)
+	fmt.Println(password) */
 
 	sessionId := inMemorySession.Init(username)
 
-	cookie := http.Cookie {
-		Name: COOKIE_NAME,
-		Value: sessionId,
-		Expires: time.Now().Add(5*time.Minute),
+	cookie := http.Cookie{
+		Name:    COOKIE_NAME,
+		Value:   sessionId,
+		Expires: time.Now().Add(5 * time.Second),
 	}
 
 	http.SetCookie(w, &cookie)
@@ -197,7 +245,7 @@ func StartFunc() {
 
 func main() {
 
-	inMemorySession = session.NewSession()
+	inMemorySession = NewSession()
 
 	rand.Seed(time.Now().Unix())
 

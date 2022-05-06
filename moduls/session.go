@@ -1,8 +1,4 @@
-package session
-
-import (
-	"./utils"
-)
+package moduls
 
 type sessionData struct {
 	Username string
@@ -21,9 +17,9 @@ func NewSession() *Session {
 }
 
 func (s *Session) Init(username string) string {
-	sessionId := utils.GenerateId()
+	sessionId := GenerateId()
 
-	data := &sessionData(Username: username)
+	data := &sessionData{Username: username}
 
 	s.data[sessionId] = data
 

@@ -1,8 +1,8 @@
-package utils
+package moduls
 
 import (
 	"fmt"
-	"crypto/rand"
+	"math/rand"
 )
 
 func GenerateId() string {
