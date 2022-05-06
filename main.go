@@ -13,6 +13,10 @@ import (
 	"time"
 	//"reflect"
 
+	//"./utils"
+	"Cards/session"
+	"github.com/PulsarG/Cards/session"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 )
@@ -26,8 +30,13 @@ type WordsStruct struct {
 }
 
 var database *sql.DB
+var inMemorySession *session.Session
 
 const CODE = 301
+
+const (
+	COOKIE_NAME = "sessionId"
+)
 
 var datas []byte
 
@@ -98,7 +107,7 @@ func SetData(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetData(w http.ResponseWriter, r *http.Request) {
-	
+
 	_, words, err := LoadWords()
 	if err != nil {
 		log.Panicln(err)
@@ -142,6 +151,26 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	m.ExecuteTemplate(w, "userpage", nil)
 }
 
+func PostLoginPage(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("login")
+	password := r.FormValue("password")
+
+	fmt.Println(username)
+	fmt.Println(password)
+
+	sessionId := inMemorySession.Init(username)
+
+	cookie := http.Cookie {
+		Name: COOKIE_NAME,
+		Value: sessionId,
+		Expires: time.Now().Add(5*time.Minute),
+	}
+
+	http.SetCookie(w, &cookie)
+
+	http.Redirect(w, r, "/", CODE)
+}
+
 // *****************************************************************************************************************************************************************
 
 func StartFunc() {
@@ -157,6 +186,7 @@ func StartFunc() {
 	rtr.HandleFunc("/list", List)
 	rtr.HandleFunc("/addwords", AddWords).Methods("POST")
 	rtr.HandleFunc("/user", LoginPage)
+	rtr.HandleFunc("/login", PostLoginPage)
 	rtr.HandleFunc("/get", GetData)
 	rtr.HandleFunc("/set", SetData)
 	/* rtr.HandleFunc("/reg", RegNewUser)
@@ -166,6 +196,8 @@ func StartFunc() {
 }
 
 func main() {
+
+	inMemorySession = session.NewSession()
 
 	rand.Seed(time.Now().Unix())
 
